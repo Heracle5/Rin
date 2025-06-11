@@ -10,6 +10,7 @@ import { StorageService } from './services/storage';
 import { TagService } from './services/tag';
 import { UserService } from './services/user';
 import { ConfigService } from './services/config';
+import { TurnstileService } from './services/turnstile';
 
 export const app = () => new Elysia({ aot: false })
     .use(cors({
@@ -35,6 +36,7 @@ export const app = () => new Elysia({ aot: false })
     .use(FriendService())
     .use(SEOService())
     .use(RSSService())
+    .use(TurnstileService())
     .use(ConfigService())
     .get('/', () => `Hi`)
     .onError(({ path, params, code }) => {

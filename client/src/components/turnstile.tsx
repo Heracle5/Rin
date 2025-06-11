@@ -7,32 +7,42 @@ declare global {
 }
 
 export function Turnstile({ onSuccess }: { onSuccess: (token: string) => void }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!ref.current) return;
+    const container = ref.current!
+    if (!container) return
+
     function render() {
-      if (!window.turnstile || !ref.current) return;
-      const id = window.turnstile.render(ref.current, {
+      if (!window.turnstile) return
+      const id = window.turnstile.render(container, {
         sitekey: process.env.TURNSTILE_SITE_KEY,
         callback: onSuccess,
-      });
-      return () => window.turnstile.remove(id);
+      })
+      container.dataset.widgetId = String(id)
     }
-    if (window.turnstile) {
-      return render();
-    }
-    const script = document.createElement('script');
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-    script.async = true;
-    script.onload = () => {
-      render();
-    };
-    document.head.appendChild(script);
-    return () => {
-      if (script.parentNode) script.parentNode.removeChild(script);
-    };
-  }, [onSuccess]);
 
-  return <div ref={ref} className="cf-turnstile" />;
+    if (window.turnstile) {
+      render()
+      return () => {
+        const widgetId = container.dataset.widgetId
+        if (widgetId) window.turnstile.remove(widgetId)
+      }
+    }
+
+    const script = document.createElement('script')
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
+    script.async = true
+    script.defer = true
+    script.onload = render
+    document.head.appendChild(script)
+
+    return () => {
+      const widgetId = container.dataset.widgetId
+      if (widgetId && window.turnstile) window.turnstile.remove(widgetId)
+      script.remove()
+    }
+  }, [onSuccess])
+
+  return <div ref={ref} className="cf-turnstile" />
 }
