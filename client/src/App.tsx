@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { getCookie } from 'typescript-cookie'
+import { getCookie, setCookie } from 'typescript-cookie'
 import { DefaultParams, PathPattern, Route, Switch } from 'wouter'
 import Footer from './components/footer'
 import { Header } from './components/header'
@@ -23,12 +23,29 @@ import { tryInt } from './utils/int'
 import { SearchPage } from './page/search.tsx'
 import { Tips, TipsPage } from './components/tips.tsx'
 import { useTranslation } from 'react-i18next'
+import { Turnstile } from './components/turnstile'
 
 function App() {
   const ref = useRef(false)
   const { t } = useTranslation()
   const [profile, setProfile] = useState<Profile | undefined>()
   const [config, setConfig] = useState<ConfigWrapper>(new ConfigWrapper({}, new Map()))
+  const [passed, setPassed] = useState<boolean>(() => getCookie('turnstile_verified') === 'true')
+
+  function rootDomain() {
+    const host = window.location.hostname
+    const parts = host.split('.')
+    return parts.length > 2 ? parts.slice(-2).join('.') : host
+  }
+
+  function handlePass(token: string) {
+    client.turnstile.verify.post({ token }).then(({ error }) => {
+      if (!error) {
+        setCookie('turnstile_verified', 'true', { expires: 365, domain: '.' + rootDomain() })
+        setPassed(true)
+      }
+    })
+  }
   useEffect(() => {
     if (ref.current) return
     if (getCookie('token')?.length ?? 0 > 0) {
@@ -62,6 +79,14 @@ function App() {
     ref.current = true
   }, [])
   const favicon = useMemo(() => config.get<string>("favicon"), [config])
+
+  if (!passed) {
+    return (
+      <div className="w-screen h-screen flex items-center justify-center">
+        <Turnstile onSuccess={handlePass} />
+      </div>
+    )
+  }
   return (
     <>
       <ClientConfigContext.Provider value={config}>
