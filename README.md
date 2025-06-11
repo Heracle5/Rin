@@ -12,7 +12,7 @@ English | [简体中文](./README_zh_CN.md)
 
 # Introduction
 
-Rin is a blog based on Cloudflare Pages + Workers + D1 + R2. It does not require a server to deploy. It can be deployed just with a domain name that resolves to Cloudflare.
+Rin is a blog based on Cloudflare Pages + Workers + D1 + R2. It does not require a server to deploy. It can be deployed just with a domain name that resolves to Cloudflare. 
 
 ## Demo
 
