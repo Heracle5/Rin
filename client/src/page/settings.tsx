@@ -93,6 +93,8 @@ export function Settings() {
                             <ItemSwitch title={t('settings.friend.apply.title')} description={t('settings.friend.apply.desc')} type="client" configKey="friend_apply_enable" />
                             <ItemSwitch title={t('settings.friend.health.title')} description={t('settings.friend.health.desc')} type="server" configKey="friend_crontab" />
                             <ItemInput title={t('settings.friend.health.ua.title')} description={t('settings.friend.health.ua.desc')} type="server" configKey="friend_ua" configKeyTitle="User-Agent" />
+                            <ItemTitle title="安全设置" />
+                            <ItemSwitch title="启用人机验证" description="启用 Cloudflare Turnstile 人机验证，防止恶意访问。3小时内首次访问需要验证。" type="server" configKey="turnstile.enabled" />
                             <ItemTitle title={t('settings.other.title')} />
                             <ItemSwitch title={t('settings.login.enable.title')} description={t('settings.login.enable.desc', {"url": oauth_url})} type="client" configKey="login.enabled" />
                             <ItemSwitch title={t('settings.comment.enable.title')} description={t('settings.comment.enable.desc')} type="client" configKey="comment.enabled" />

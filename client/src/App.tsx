@@ -23,6 +23,7 @@ import { tryInt } from './utils/int'
 import { SearchPage } from './page/search.tsx'
 import { Tips, TipsPage } from './components/tips.tsx'
 import { useTranslation } from 'react-i18next'
+import { TurnstileProvider } from './components/turnstile.tsx'
 
 function App() {
   const ref = useRef(false)
@@ -66,6 +67,7 @@ function App() {
     <>
       <ClientConfigContext.Provider value={config}>
         <ProfileContext.Provider value={profile}>
+          <TurnstileProvider>
           <Helmet>
             {favicon &&
               <link rel="icon" href={favicon} />}
@@ -163,6 +165,7 @@ function App() {
             {/* Default route in a switch */}
             <Route>404: No such page!</Route>
           </Switch>
+          </TurnstileProvider>
         </ProfileContext.Provider>
       </ClientConfigContext.Provider>
     </>

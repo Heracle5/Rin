@@ -12,7 +12,9 @@ export const defaultClientConfig = new Map(Object.entries({
 export const defaultServerConfig = new Map(Object.entries({
     "friend_apply_auto_accept": false,
     "friend_crontab": true,
-    "friend_ua": "Rin-Check/0.1.0"
+    "friend_ua": "Rin-Check/0.1.0",
+    "turnstile.enabled": true,
+    "turnstile.timeout": 3 * 60 * 60 * 1000,
 }))
 
 export class ConfigWrapper {

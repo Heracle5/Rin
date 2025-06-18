@@ -21,6 +21,9 @@ export interface Env {
 
     RSS_TITLE: string,
     RSS_DESCRIPTION: string,
+
+    TURNSTILE_SITE_KEY: string,
+    TURNSTILE_SECRET_KEY: string,
 }
 
 export function db(env: Env) {
