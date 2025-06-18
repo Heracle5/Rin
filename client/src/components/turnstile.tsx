@@ -27,7 +27,7 @@ declare global {
 
 export function TurnstileProvider({ children }: { children: React.ReactNode }) {
     const [config, setConfig] = useState<TurnstileConfig>({ enabled: false });
-    const [status, setStatus] = useState<TurnstileStatus>({ verified: true, needsVerification: false });
+    const [, setStatus] = useState<TurnstileStatus>({ verified: true, needsVerification: false });
     const [loading, setLoading] = useState(true);
     const [showVerification, setShowVerification] = useState(false);
 
